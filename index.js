@@ -22,7 +22,7 @@ function prop(obj, path, value) {
   var target = obj;  
   
   var key = parts.pop();
-  while (parts.length) {
+  while (parts.length && !isPrototypePolluted(key)) {
     var nextTarget = target[key];
     if (!nextTarget) {
       if (value === undefined) {
@@ -51,4 +51,8 @@ function prop(obj, path, value) {
       origParts.pop();
       prop(obj, origParts, undefined);          
   }
+}
+
+function isPrototypePolluted(key) {
+  return ['__proto__', 'constructor', 'prototype'].includes(key);
 }
